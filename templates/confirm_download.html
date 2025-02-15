@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Download</title>
+</head>
+<body>
+    <h2>⚠️ Warning: File Integrity Compromised!</h2>
+    <p>The file may have been tampered with. Do you still want to proceed with the download?</p>
+
+    <a href="{{ url_for('proceed_download', id_num=id_num) }}">
+        <button>Yes, Proceed with Download</button>
+    </a>
+
+    <a href="{{ url_for('index') }}">
+        <button>No, Cancel</button>
+    </a>
+</body>
+</html>

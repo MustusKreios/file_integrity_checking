@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload & Integrity Check</title>
+</head>
+<body>
+    <h2>Upload a PDF</h2>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Full Name" required><br><br>
+        <input type="email" name="email" placeholder="Email" required><br><br>
+        <input type="text" name="student_id" placeholder="Student ID" required><br><br>
+        <input type="file" name="file" required><br><br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Download a File</h2>
+    <form action="/download/" method="GET">
+        <input type="text" name="id_num" placeholder="Enter file id" required>
+        <button type="submit">Download</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
