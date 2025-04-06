@@ -54,10 +54,11 @@ def enhanced_block_processing(file_size):
     wasted_bits = total_bits_used - file_size
     return used_blocks, wasted_bits, memory_waste
 
-def generate_enhanced_hash(filename: str, file_size: int) -> str:
-    """Generates a secure, entropy-enhanced hash with block processing."""
-
+def generate_enhanced_hash(file_path: str) -> str:
+    """Generates a secure, entropy-enhanced hash by incorporating the file content."""
+    
     # Step 1: Convert filename to binary
+    filename = os.path.basename(file_path)  # Extract filename from path
     filename_binary = to_binary(filename)
     bit_length = len(filename_binary)
 
@@ -78,15 +79,19 @@ def generate_enhanced_hash(filename: str, file_size: int) -> str:
     pepper = b"\x5a" * 32  # Fixed secret pepper
     secure_hash = xor_and_and_logic(final_key1, final_key2, pepper)
 
-    # Step 5 & 6: Block Processing and Memory Optimization
-    blocks, wasted_bits, memory_waste = enhanced_block_processing(file_size)
+    # Step 5: Process File Content (NEW STEP)
+    hasher = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        while chunk := f.read(8192):  # Read file in chunks
+            hasher.update(chunk)
+    
+    file_content_hash = hasher.digest()  # Hash of actual file content
 
-    # Step 7: Secure Hashing with Final XOR and Key Stretching
-    combined_data = filename_binary.encode() + salt1 + salt2 + salt3 + pepper
+    # Step 6: Combine File Content Hash with Other Factors
+    combined_data = file_content_hash + salt1 + salt2 + salt3 + pepper
+    
+    # Step 7
     stretched_key = key_stretching(combined_data)
     final_secure_hash = hashlib.sha256(stretched_key).hexdigest()
-
-    print(f"🔹 Block Processing Summary: {blocks}")
-    print(f"🔹 Wasted Bits: {wasted_bits}, Memory Waste: {memory_waste}")
 
     return final_secure_hash

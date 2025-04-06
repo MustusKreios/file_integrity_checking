@@ -41,7 +41,7 @@ def upload_file():
 
     # Compute Hash
     file_size = os.path.getsize(file_path)
-    file_hash = generate_enhanced_hash(filename, file_size)
+    file_hash = generate_enhanced_hash(file_path)
 
     # Save to database
     try:
@@ -88,8 +88,7 @@ def download_file():
         return redirect(url_for("index"))
 
     # Recompute Hash
-    file_size = os.path.getsize(file_path)
-    new_hash = generate_enhanced_hash(filename, file_size)
+    new_hash = generate_enhanced_hash(file_path)
 
     # Compare Hashes
     if new_hash != stored_hash:
