@@ -1,17 +1,14 @@
-/* Reset default styles */
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-image: linear-gradient(to right, rgb(0, 0, 0) ,black, black, rgb(0, 0, 0));
     font-family: Arial, sans-serif;
+    background-image: linear-gradient(to right, black, black);
+    color: cyan;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 body::before {
@@ -26,53 +23,78 @@ body::before {
         linear-gradient(90deg, rgba(0, 255, 255, 0.4) 1px, transparent 1px);
     background-size: 15px 15px;
     z-index: -1;
-    filter: drop-shadow(0 0 10px cyan); /* Glowing shadow effect */
+    filter: drop-shadow(0 0 10px cyan);
 }
 
-/* Centered box container */
-.container-box {
-    background-color: rgb(0, 0, 0, 0.5);
+.main-container {
+    display: flex;
+    justify-content: space-between; /* Space between the three sections */
+    align-items: flex-start;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px;
+    gap: 20px; /* Add spacing between sections */
+}
+
+.form-box,
+.algo-box {
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 225, 225, 1);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 1);
+    flex-grow: 1; /* Ensure all sections take equal space */
+    min-width: 280px;
     text-align: center;
-    width: 350px;
-    color: cyan;
 }
 
-/* Styling for headings */
-h2 {
-    margin-bottom: 15px;
-}
-
-/* Input fields and buttons */
+/* Inputs and buttons */
 input, button {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     margin: 5px 0;
-    border: 1px solid #ccc;
     border-radius: 5px;
+    border: none;
     font-size: 16px;
 }
 
 button {
-    background-color: rgb(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
     cursor: pointer;
-    border: none;
-    transition: background 0.3s, transform 0.3s;
+    transition: all 0.3s ease;
 }
 
 button:hover {
     background-color: cyan;
     color: black;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
-/* Flash messages */
 ul {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
-    color: green;
     margin-top: 10px;
+    color: lime;
+}
+
+/* Additional styling for better alignment */
+.algo-box h2,
+.form-box h2 {
+    margin-bottom: 15px;
+    color: lime;
+}
+
+.algo-box p,
+.form-box p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 10px cyan;
 }
