@@ -1,4 +1,5 @@
 import psycopg2
+import time
 from config import DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT
 
 def get_db_connection():
@@ -15,3 +16,6 @@ def get_db_connection():
     except Exception as e:
         print("❌ Database Connection Error:", e)
         return None
+
+def original_setup():
+    time.sleep(0.01) 

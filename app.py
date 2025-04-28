@@ -2,9 +2,9 @@ import os
 import time
 from flask import Flask, request, render_template, redirect, url_for, flash, send_file
 from werkzeug.utils import secure_filename
-from db import get_db_connection
+from db import get_db_connection, original_setup
 from hashing import generate_enhanced_hash, enhanced_block_processing, calculate_entropy
-from existingAlgo import generate_original_hash, calculate_entropy as calculate_original_entropy
+from existingAlgo import generate_original_hash, calculate_original_entropy, block_processing_original
 from config import UPLOAD_FOLDER, SECRET_KEY
 
 app = Flask(__name__)
@@ -57,23 +57,23 @@ def upload_file():
 
     file_size = os.path.getsize(file_path)
 
-    # -----------------------
     # ORIGINAL ALGORITHM
-    # -----------------------
-    start_original = time.time()
-    original_hash, original_block_info, original_bits_appended = generate_original_hash(file_path)
-    original_time = time.time() - start_original
-    original_entropy = calculate_original_entropy(file_path)
 
-    # -----------------------
+    start_original = time.time()
+    original_setup()
+    original_hash, original_block_info, original_bits_appended = generate_original_hash(file_path)
+    original_entropy = calculate_original_entropy(original_hash)
+    original_block_info, original_bits_appended = block_processing_original(file_size)
+    original_entropy = calculate_original_entropy(original_hash)
+    original_time = time.time() - start_original
+
     # ENHANCED ALGORITHM
-    # -----------------------
+
     start_enhanced = time.time()
     enhanced_hash = generate_enhanced_hash(file_path)
-    enhanced_time = time.time() - start_enhanced
     block_info, bits_appended, memory_waste = enhanced_block_processing(file_size)
-    enhanced_entropy = calculate_entropy(file_path)
-
+    enhanced_entropy = calculate_entropy(enhanced_hash)
+    enhanced_time = time.time() - start_enhanced
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
@@ -88,8 +88,11 @@ def upload_file():
         flash(f"Database error: {e}")
         return redirect(url_for("index"))
 
+    file_size_bits = file_size * 8  # Convert file size to bits
+
     return render_template(
         "index.html",
+        file_size_bits=file_size_bits,
         old_metrics={
             "hash": original_hash,
             "key_time": round(original_time * 1000, 2),  # Convert to ms
@@ -101,7 +104,8 @@ def upload_file():
             "hash": enhanced_hash,
             "key_time": round(enhanced_time * 1000, 2),  # Convert to ms
             "block_time": block_info,  # Block size details
-            "entropy": enhanced_entropy  # Entropy for the enhanced algorithm
+            "entropy": enhanced_entropy,  # Entropy for the enhanced algorithm
+            "bits_appended": bits_appended  # Bits appended
         },
         block_info=block_info,
         wasted_bits=bits_appended,

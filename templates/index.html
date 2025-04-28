@@ -11,6 +11,7 @@
         <div class="algo-box">
             <h2>Original Algorithm</h2>
             {% if old_metrics %}
+                <p><strong>File Size:</strong> {{ file_size_bits }} bits</p>
                 <p><strong>Hash:</strong> {{ old_metrics.hash }}</p>
                 <p><strong>Key Gen Time:</strong> {{ old_metrics.key_time }} ms</p>
                 <p><strong>Entropy:</strong> {{ old_metrics.entropy }}</p>
@@ -25,16 +26,36 @@
         <div class="form-box">
             <h2>Upload a File</h2>
             <form action="/upload" method="POST" enctype="multipart/form-data">
-                <input type="text" name="name" placeholder="Full Name" required><br><br>
-                <input type="email" name="email" placeholder="Email" required><br><br>
-                <input type="text" name="student_id" placeholder="Student ID" required><br><br>
-                <input type="file" name="file" required><br><br>
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Full Name" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="student_id">Student ID:</label>
+                    <input type="text" id="student_id" name="student_id" placeholder="Student ID" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="file">Choose a file:</label>
+                    <input type="file" id="file" name="file" required>
+                </div>
+        
                 <button type="submit">Upload</button>
             </form>
-
+        
             <h2>Download a File</h2>
             <form action="/download/" method="GET">
-                <input type="text" name="id_num" placeholder="Enter file ID" required>
+                <div class="form-group">
+                    <label for="id_num">Enter File ID:</label>
+                    <input type="text" id="id_num" name="id_num" placeholder="Enter file ID" required>
+                </div>
+        
                 <button type="submit">Download</button>
             </form>
         </div>
@@ -43,6 +64,7 @@
         <div class="algo-box">
             <h2>Enhanced Algorithm</h2>
             {% if enhanced_metrics %}
+                <p><strong>File Size:</strong> {{ file_size_bits }} bits</p>
                 <p><strong>Hash:</strong> {{ enhanced_metrics.hash }}</p>
                 <p><strong>Key Gen Time:</strong> {{ enhanced_metrics.key_time }} ms</p>
                 <p><strong>Entropy:</strong> {{ enhanced_metrics.entropy }}</p>
